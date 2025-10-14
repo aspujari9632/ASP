@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay Kumar Question Bank</title>
+<style>
+  body {
+    background-color: #0073e6;
+    color: white;
+    font-family: "Noto Sans Kannada", sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 36px;
+    margin-top: 20px;
+  }
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .marquee {
+    background: yellow;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .marquee span {
+    position: absolute;
+    width: 100%;
+    transform: translateX(100%);
+    animation: scroll 10s linear infinite;
+  }
+  @keyframes scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  .quiz-box {
+    background: rgba(0,0,80,0.7);
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+  }
+  button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #005bbb;
+    color: white;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #3399ff;
+  }
+  .selected {
+    background-color: #00cc66 !important;
+  }
+  .result {
+    font-size: 22px;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h1>AJAY KUMAR QUESTION BANK</h1>
+<h2>ಅಜಯ್ ಕುಮಾರ್ ಪ್ರಶ್ನೆ ಬ್ಯಾಂಕ್</h2>
+
+<div class="marquee">
+  <span>⚡ ಮಿನಿಮಮ್ 50 ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರ ಮಾಡಿದರೆ ನೀವು ಚೆನ್ನಾಗಿ ಓದುತ್ತೀರಿ ಎಂದರ್ಥ ⚡</span>
+</div>
+
+<h3>📚 ಇತಿಹಾಸದ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳು</h3>
+<button onclick="startQuiz()">ಕ್ವಿಜ್ ಪ್ರಾರಂಭಿಸಲು ಇಲ್ಲಿ ಒತ್ತಿ</button>
+
+<div id="quiz" style="display:none;">
+  <div id="timer">⏱️ Time Left: 60:00</div>
+  <div class="quiz-box">
+    <h3 id="question"></h3>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next ➡️</button>
+  </div>
+</div>
+
+<div id="result" style="display:none;" class="result"></div>
+
+<script>
+let questions = [
+  {
+    q: "ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯವನ್ನು ಯಾರು ಸ್ಥಾಪಿಸಿದರು?",
+    options: ["ಹರಿಹರ ಮತ್ತು ಬುಕ್ಕ", "ಕೃಷ್ಣದೇವರಾಯ", "ಅಚ್ಯುತದೇವರಾಯ", "ತಿರುಮಲದೇವರಾಯ", "ಗೊತ್ತಿಲ್ಲ"],
+    answer: 0
+  },
+  {
+    q: "ಬಹುಮನಿ ಸುಲ್ತಾನರ ರಾಜಧಾನಿ ಯಾವುದು?",
+    options: ["ಗುಲ್ಬರ್ಗಾ", "ಬೀಜಾಪುರ", "ಹಂಪಿ", "ಬಿದರ್", "ಗೊತ್ತಿಲ್ಲ"],
+    answer: 0
+  },
+  {
+    q: "ಮಹಮ್ಮದ್ ಬಿನ್ ತುಘಲಕ್ ಯಾವ ವಂಶದವರು?",
+    options: ["ತುಘಲಕ್", "ಖಿಲ್ಜಿ", "ಲೋದಿ", "ಸಯ್ಯಿದ", "ಗೊತ್ತಿಲ್ಲ"],
+    answer: 0
+  },
+  {
+    q: "ವಿಜಯನಗರ ಮತ್ತು ಬಹುಮನಿ ಯುದ್ಧ ಯಾವುದು?",
+    options: ["ತಾಲಿಕೋಟೆ ಯುದ್ಧ", "ಹಂಪಿ ಯುದ್ಧ", "ಗುಲ್ಬರ್ಗಾ ಯುದ್ಧ", "ಮೈಸೂರಿನ ಯುದ್ಧ", "ಗೊತ್ತಿಲ್ಲ"],
+    answer: 0
+  },
+  {
+    q: "ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯದ ಪ್ರಸಿದ್ಧ ರಾಜ ಯಾರು?",
+    options: ["ಕೃಷ್ಣದೇವರಾಯ", "ಹರಿಹರ", "ಬುಕ್ಕ", "ಅಚ್ಯುತದೇವರಾಯ", "ಗೊತ್ತಿಲ್ಲ"],
+    answer: 0
+  }
+];
+
+let current = 0;
+let score = 0;
+let selected = null;
+let timer = 3600; // seconds
+
+function startQuiz() {
+  document.querySelector("button").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showQuestion();
+  setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (timer <= 0) return;
+  timer--;
+  let minutes = Math.floor(timer / 60);
+  let seconds = timer % 60;
+  document.getElementById("timer").innerText = `⏱️ Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+  if (timer === 0) finishQuiz();
+}
+
+function showQuestion() {
+  let q = questions[current];
+  document.getElementById("question").innerText = `Q${current + 1}. ${q.q}`;
+  let opts = q.options.map((opt, i) =>
+    `<button onclick=\"selectOption(${i})\" id='opt${i}'>${String.fromCharCode(65+i)}. ${opt}</button>`
+  ).join('');
+  document.getElementById("options").innerHTML = opts;
+}
+
+function selectOption(i) {
+  selected = i;
+  for (let j = 0; j < 5; j++) document.getElementById('opt'+j).classList.remove('selected');
+  document.getElementById('opt'+i).classList.add('selected');
+}
+
+function nextQuestion() {
+  if (selected !== null && selected === questions[current].answer) score++;
+  selected = null;
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  document.getElementById("quiz").style.display = "none";
+  let percent = Math.round((score / questions.length) * 100);
+  let message = score >= 50 ? 
+    "🎉 You are doing well! ನೀವು ಓಡುತ್ತಿದ್ದೀರಿ!" :
+    "😢 You are not studying well! ನೀವು ಓದುತ್ತಿಲ್ಲ!";
+  document.getElementById("result").innerHTML = `Marks: ${score}/${questions.length}<br>Percentage: ${percent}%<br>${message}<br><br>ಧನ್ಯವಾದಗಳು / Thank You!`;
+  document.getElementById("result").style.display = "block";
+}
+</script>
+
+</body>
+</html>
