@@ -159,6 +159,13 @@
 </div>
 
 <script>
+  // ✅ Shuffle array function (to randomize A/B/C/D order)
+function shuffleArray(array) {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
 /* ============================
    100 QUESTIONS (mixed topics)
    Each: { q, options: [A,B,C,D,"ಗೊತ್ತಿಲ್ಲ"], answer: "A/B/C/D text" }
@@ -275,6 +282,16 @@ const QUESTIONS = [
 {q:"99. 'ಆನ್ಲೈನ್ ಲರ್ನಿಂಗ್' ಮುಖ್ಯ ಪ್ರಯೋಜನ ಯಾವದು?", options:["ಅಕ್ಸೆಸ್ಸ್ ಮತ್ತು ಆಹರ್ಯತೆ","ವ್ಯಾಪಾರ","ಕ್ರೀಡೆ","ಕಲಾ","ಗೊತ್ತಿಲ್ಲ"], answer:"ಅಕ್ಸೆಸ್ಸ್ ಮತ್ತು ಆಹರ್ಯತೆ"},
 {q:"100. ಇತಿಹಾಸ ಅಧ್ಯಯನದ ಉದ್ದೇಶ ಯಾವದು?", options:["ಭವಿಷ್ಯದ ಪಾಠಗಳು ಕಲಿಯಲು","ಮನರಂಜನೆ","ವಾಣಿಜ್ಯ","ಕ್ರೀಡೆ","ಗೊತ್ತಿಲ್ಲ"], answer:"ಭವಿಷ್ಯದ ಪಾಠಗಳು ಕಲಿಯಲು"}
 ];
+  // ✅ Randomize the order of options for each question
+const SHUFFLED_QUESTIONS = QUESTIONS.map(q => {
+  const correctAnswer = q.answer; // keep correct one
+  const shuffledOptions = shuffleArray(q.options); // shuffle A/B/C/D
+  return {
+    ...q,
+    options: shuffledOptions,
+    answer: correctAnswer
+  };
+});
 
 /* ============================
    App State & DOM refs
